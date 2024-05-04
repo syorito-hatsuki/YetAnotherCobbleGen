@@ -2,20 +2,26 @@ package dev.syoritohatsuki.yacg.common.item
 
 import dev.syoritohatsuki.yacg.common.block.entity.GeneratorBlockEntity
 import dev.syoritohatsuki.yacg.message.upgradeItemTooltip
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
-import net.minecraft.world.World
 
 class UpgradeItem(val type: UpgradesTypes) : Item(Settings().maxCount(1)) {
 
+    enum class UpgradesTypes {
+        COEFFICIENT, COUNT, SPEED
+    }
+
     override fun appendTooltip(
-        stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext
+        stack: ItemStack,
+        context: TooltipContext,
+        tooltip: MutableList<Text>,
+        tooltipType: TooltipType
     ) {
-        super.appendTooltip(stack, world, tooltip, context)
+        super.appendTooltip(stack, context, tooltip, tooltipType)
         tooltip.upgradeItemTooltip(type.name)
     }
 
@@ -28,10 +34,5 @@ class UpgradeItem(val type: UpgradesTypes) : Item(Settings().maxCount(1)) {
         }
 
         return super.useOnBlock(context)
-    }
-
-
-    enum class UpgradesTypes {
-        COEFFICIENT, COUNT, SPEED
     }
 }

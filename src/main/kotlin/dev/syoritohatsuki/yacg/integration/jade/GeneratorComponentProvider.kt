@@ -12,6 +12,7 @@ import snownee.jade.api.IBlockComponentProvider
 import snownee.jade.api.IServerDataProvider
 import snownee.jade.api.ITooltip
 import snownee.jade.api.config.IPluginConfig
+import snownee.jade.api.ui.IElementHelper
 
 object GeneratorComponentProvider : IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
@@ -31,24 +32,15 @@ object GeneratorComponentProvider : IBlockComponentProvider, IServerDataProvider
     }
 
     override fun appendTooltip(tooltip: ITooltip, accessor: BlockAccessor, config: IPluginConfig) {
-        val elements = tooltip.elementHelper
+        val elements = IElementHelper.get()
         if (accessor.serverData.getBoolean("coefficient")) tooltip.append(
-            elements.item(
-                ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE),
-                0.5f
-            )
+            elements.item(ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE), 0.5f)
         )
         if (accessor.serverData.getBoolean("count")) tooltip.append(
-            elements.item(
-                ItemStack(ItemsRegistry.COUNT_UPGRADE),
-                0.5f
-            )
+            elements.item(ItemStack(ItemsRegistry.COUNT_UPGRADE), 0.5f)
         )
         if (accessor.serverData.getBoolean("speed")) tooltip.append(
-            elements.item(
-                ItemStack(ItemsRegistry.SPEED_UPGRADE),
-                0.5f
-            )
+            elements.item(ItemStack(ItemsRegistry.SPEED_UPGRADE), 0.5f)
         )
     }
 }

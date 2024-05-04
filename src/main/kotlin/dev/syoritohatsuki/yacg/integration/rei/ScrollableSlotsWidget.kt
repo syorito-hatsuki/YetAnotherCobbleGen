@@ -32,11 +32,16 @@ class ScrollableSlotsWidget(private val bounds: Rectangle, ingredients: Collecti
 
     override fun children() = widgets
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, delta: Double): Boolean =
-        if (containsMouse(mouseX, mouseY)) {
-            scrolling.offset(ClothConfigInitializer.getScrollStep() * -delta, true)
-            true
-        } else false
+    override fun mouseScrolled(
+        mouseX: Double,
+        mouseY: Double,
+        horizontalAmount: Double,
+        verticalAmount: Double
+    ): Boolean = if (containsMouse(mouseX, mouseY)) {
+        scrolling.offset(ClothConfigInitializer.getScrollStep() * -horizontalAmount, true)
+        true
+    } else false
+
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean =
         scrolling.updateDraggingState(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button)

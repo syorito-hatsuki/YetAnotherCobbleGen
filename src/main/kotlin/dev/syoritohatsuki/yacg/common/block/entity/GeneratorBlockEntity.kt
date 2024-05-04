@@ -12,6 +12,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
@@ -107,9 +108,9 @@ class GeneratorBlockEntity(
 
     override fun markDirty() = super<ImplementedInventory>.markDirty()
 
-    override fun writeNbt(nbt: NbtCompound) {
-        super.writeNbt(nbt)
-        Inventories.writeNbt(nbt, inventory)
+    override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+        super.writeNbt(nbt, registryLookup)
+        Inventories.writeNbt(nbt, inventory, registryLookup)
         nbt.putByte("yacg.progress", progress)
         nbt.putString("yacg.type", type)
         listUpgrades.let { types ->
@@ -119,9 +120,9 @@ class GeneratorBlockEntity(
         }
     }
 
-    override fun readNbt(nbt: NbtCompound) {
-        Inventories.readNbt(nbt, inventory)
-        UpgradesTypes.values().let { types ->
+    override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
+        Inventories.readNbt(nbt, inventory, registryLookup)
+        UpgradesTypes.entries.toTypedArray().let { types ->
             types.forEach {
                 nbt.getString("yacg.upgrade.${it.name.lowercase()}").apply {
                     if (isNullOrBlank()) return@forEach
@@ -129,7 +130,7 @@ class GeneratorBlockEntity(
                 }
             }
         }
-        super.readNbt(nbt)
+        super.readNbt(nbt, registryLookup)
         type = nbt.getString("yacg.type")
         progress = nbt.getByte("yacg.progress")
     }

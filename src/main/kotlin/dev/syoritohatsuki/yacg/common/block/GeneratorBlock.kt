@@ -1,5 +1,6 @@
 package dev.syoritohatsuki.yacg.common.block
 
+import com.mojang.serialization.MapCodec
 import dev.syoritohatsuki.yacg.common.block.entity.GeneratorBlockEntity
 import dev.syoritohatsuki.yacg.common.item.UpgradeItem
 import dev.syoritohatsuki.yacg.config.GeneratorsConfig
@@ -7,15 +8,15 @@ import dev.syoritohatsuki.yacg.message.generatorChancesTooltip
 import dev.syoritohatsuki.yacg.message.hiddenTooltip
 import dev.syoritohatsuki.yacg.registry.BlocksEntityRegistry
 import dev.syoritohatsuki.yacg.registry.ItemsRegistry
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -29,17 +30,18 @@ import net.minecraft.util.*
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-
-@Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
 open class GeneratorBlock(internal val type: String) :
-    BlockWithEntity(FabricBlockSettings.create().strength(2f).requiresTool()), BlockEntityProvider {
-
+    BlockWithEntity(Settings.create().strength(2f).requiresTool()), BlockEntityProvider {
     companion object {
+
         val ENABLED: BooleanProperty = Properties.ENABLED
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
+    }
+
+    override fun getCodec(): MapCodec<out BlockWithEntity> = createCodec {
+        GeneratorBlock(type)
     }
 
     init {
@@ -49,9 +51,10 @@ open class GeneratorBlock(internal val type: String) :
     }
 
     override fun appendTooltip(
-        stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext
+        stack: ItemStack, context: Item.TooltipContext, tooltip: MutableList<Text>, options: TooltipType
     ) {
-        super.appendTooltip(stack, world, tooltip, options)
+        super.appendTooltip(stack, context, tooltip, options)
+
         if (!Screen.hasShiftDown()) {
             tooltip.hiddenTooltip()
             return
@@ -61,7 +64,6 @@ open class GeneratorBlock(internal val type: String) :
             tooltip.generatorChancesTooltip(it.coefficient, it.itemId)
         }
     }
-
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState =
         defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite) as BlockState
@@ -102,8 +104,7 @@ open class GeneratorBlock(internal val type: String) :
         )
     }
 
-    override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
-        super.onBreak(world, pos, state, player)
+    override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity): BlockState {
         val x = player.x
         val y = player.y
         val z = player.z
@@ -122,10 +123,11 @@ open class GeneratorBlock(internal val type: String) :
                 )
             }
         }
+        return super.onBreak(world, pos, state, player)
     }
 
     override fun onUse(
-        state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult
+        state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult
     ): ActionResult {
         if (!world.isClient) (world.getBlockEntity(pos) as GeneratorBlockEntity).let { blockEntity ->
             if (player.isSneaking) blockEntity.items.forEachIndexed { index, itemStack ->
@@ -143,6 +145,7 @@ open class GeneratorBlock(internal val type: String) :
                 player.sendMessage(message, false)
             }
         }
+
         return ActionResult.SUCCESS
     }
 
@@ -151,6 +154,6 @@ open class GeneratorBlock(internal val type: String) :
 
     override fun <T : BlockEntity> getTicker(
         world: World, state: BlockState, type: BlockEntityType<T>
-    ): BlockEntityTicker<T>? = checkType(type, BlocksEntityRegistry.GENERATOR_ENTITY, GeneratorBlockEntity::tick)
+    ): BlockEntityTicker<T>? = validateTicker(type, BlocksEntityRegistry.GENERATOR_ENTITY, GeneratorBlockEntity::tick)
 
 }
