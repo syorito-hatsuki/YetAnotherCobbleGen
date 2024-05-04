@@ -10,7 +10,7 @@ base {
 }
 
 val fabricKotlinVersion: String by project
-val javaVersion = JavaVersion.VERSION_17
+val javaVersion = JavaVersion.VERSION_21
 val loaderVersion: String by project
 val minecraftVersion: String by project
 
@@ -49,6 +49,11 @@ dependencies {
     val reiVersion: String by project
     modLocalRuntime("me.shedaniel", "RoughlyEnoughItems-fabric", reiVersion)
     modCompileOnly("me.shedaniel", "RoughlyEnoughItems-api-fabric", reiVersion)
+    modCompileOnly("me.shedaniel", "RoughlyEnoughItems-default-plugin-fabric", reiVersion)
+
+    modApi("me.shedaniel.cloth:cloth-config-fabric:+") {
+        exclude(group = "net.fabricmc.fabric-api")
+    }
 
     include(modImplementation("maven.modrinth", "fstats", "2023.12.2"))
 
