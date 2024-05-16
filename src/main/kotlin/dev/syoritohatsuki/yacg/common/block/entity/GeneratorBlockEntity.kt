@@ -27,7 +27,7 @@ class GeneratorBlockEntity(
 
     private var progress: Byte = 0
 
-    val listUpgrades: MutableList<UpgradesTypes> = mutableListOf()
+    val listUpgrades: MutableSet<UpgradesTypes> = mutableSetOf()
 
     private var countMultiply: Byte = 1
     private var coefficientMultiply: Byte = 1
@@ -118,13 +118,11 @@ class GeneratorBlockEntity(
             return null
         }
 
-        private fun getEmptySlot(items: DefaultedList<ItemStack>): Int? {
-            items.indices.forEach {
-                if (items[it].isEmpty) return it
+        private fun getEmptySlot(items: DefaultedList<ItemStack>): Int? =
+            items.indexOfFirst { it.isEmpty }.takeIf { it != -1 } ?: run {
+                logger.warn("Can't find any free slot from 255 slot's")
+                return null
             }
-            logger.warn("Can't find any free slot from 255 slot's")
-            return null
-        }
     }
 
     override var items: DefaultedList<ItemStack> = inventory
@@ -137,10 +135,8 @@ class GeneratorBlockEntity(
         nbt.putLong("yacg.energy", energyStorage.amount)
         nbt.putByte("yacg.progress", progress)
         nbt.putString("yacg.type", type)
-        listUpgrades.let { types ->
-            types.forEach {
-                nbt.putString("yacg.upgrade.${it.name.lowercase()}", it.name)
-            }
+        listUpgrades.forEach {
+            nbt.putString("yacg.upgrade.${it.name.lowercase()}", it.name)
         }
     }
 
@@ -150,12 +146,10 @@ class GeneratorBlockEntity(
         progress = nbt.getByte("yacg.progress")
         type = nbt.getString("yacg.type")
         energyUsage = GeneratorsConfig.getEnergyUsage(type)
-        UpgradesTypes.entries.toTypedArray().let { types ->
-            types.forEach {
-                nbt.getString("yacg.upgrade.${it.name.lowercase()}").apply {
-                    if (isNullOrBlank()) return@forEach
-                    insertUpgrade(UpgradesTypes.valueOf(this))
-                }
+        UpgradesTypes.entries.forEach {
+            nbt.getString("yacg.upgrade.${it.name.lowercase()}").apply {
+                if (isNullOrBlank()) return@forEach
+                insertUpgrade(UpgradesTypes.valueOf(this))
             }
         }
         super.readNbt(nbt, registryLookup)

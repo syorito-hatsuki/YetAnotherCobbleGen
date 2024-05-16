@@ -32,8 +32,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-open class GeneratorBlock(internal val type: String) :
-    BlockWithEntity(Settings.create().strength(2f).requiresTool()), BlockEntityProvider {
+open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.create().strength(2f).requiresTool()),
+    BlockEntityProvider {
     companion object {
         val ENABLED: BooleanProperty = Properties.ENABLED
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
@@ -84,14 +84,14 @@ open class GeneratorBlock(internal val type: String) :
     override fun onStateReplaced(
         state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean
     ) {
-        if (state.block != newState.block) {
-            val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is GeneratorBlockEntity) {
-                ItemScatterer.spawn(world, pos, blockEntity)
-                world.updateComparators(pos, this)
-            }
-            super.onStateReplaced(state, world, pos, newState, moved)
+        if (state.block == newState.block) return
+
+        val blockEntity = world.getBlockEntity(pos)
+        if (blockEntity is GeneratorBlockEntity) {
+            ItemScatterer.spawn(world, pos, blockEntity)
+            world.updateComparators(pos, this)
         }
+        super.onStateReplaced(state, world, pos, newState, moved)
     }
 
     override fun neighborUpdate(
@@ -104,27 +104,17 @@ open class GeneratorBlock(internal val type: String) :
     }
 
     override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity): BlockState {
-        val x = player.x
-        val y = player.y
-        val z = player.z
         (world.getBlockEntity(pos) as GeneratorBlockEntity).listUpgrades.forEach { type ->
-            when (type) {
-                UpgradeItem.UpgradesTypes.COEFFICIENT -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE))
+            world.spawnEntity(
+                ItemEntity(
+                    world, player.x, player.y, player.z, when (type) {
+                        UpgradeItem.UpgradesTypes.COEFFICIENT -> ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE)
+                        UpgradeItem.UpgradesTypes.COUNT -> ItemStack(ItemsRegistry.COUNT_UPGRADE)
+                        UpgradeItem.UpgradesTypes.SPEED -> ItemStack(ItemsRegistry.SPEED_UPGRADE)
+                        UpgradeItem.UpgradesTypes.ENERGY_FREE -> ItemStack(ItemsRegistry.ENERGY_FREE_UPGRADE)
+                    }
                 )
-
-                UpgradeItem.UpgradesTypes.COUNT -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.COUNT_UPGRADE))
-                )
-
-                UpgradeItem.UpgradesTypes.SPEED -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.SPEED_UPGRADE))
-                )
-
-                UpgradeItem.UpgradesTypes.ENERGY_FREE -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.ENERGY_FREE_UPGRADE))
-                )
-            }
+            )
         }
         return super.onBreak(world, pos, state, player)
     }
@@ -142,7 +132,7 @@ open class GeneratorBlock(internal val type: String) :
                         .formatted(Formatting.AQUA)
                 )
                 blockEntity.items.forEach {
-                    if (it.item is UpgradeItem || it.item == Items.AIR) return@forEach
+                    if (it.item == Items.AIR) return@forEach
                     message.append("\n - ${it.item.name.string} x${it.count}")
                 }
                 player.sendMessage(message, false)

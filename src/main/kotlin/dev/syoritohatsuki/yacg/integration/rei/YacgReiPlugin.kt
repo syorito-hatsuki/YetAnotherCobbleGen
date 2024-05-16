@@ -27,13 +27,15 @@ object YacgReiPlugin : REIClientPlugin {
 
     override fun registerDisplays(registry: DisplayRegistry) {
         GeneratorsConfig.getTypes().forEach { type ->
-            registry.add(TableDisplay(EntryIngredients.of(ItemStack(Registries.ITEM.get(Identifier(MOD_ID, type)))),
-                GeneratorsConfig.getBlocks(type)?.map { item ->
-                    EntryIngredient.of(
-                        EntryStacks.of(ItemStack(Registries.ITEM.get(Identifier(item.itemId)), item.count))
-                            .tooltip(generationRarityText(item.coefficient))
-                    )
-                } ?: return@forEach))
+            registry.add(
+                TableDisplay(EntryIngredients.of(ItemStack(Registries.ITEM.get(Identifier(MOD_ID, type)))),
+                    GeneratorsConfig.getBlocks(type).map { item ->
+                        EntryIngredient.of(
+                            EntryStacks.of(ItemStack(Registries.ITEM.get(Identifier(item.itemId)), item.count))
+                                .tooltip(generationRarityText(item.coefficient))
+                        )
+                    })
+            )
         }
     }
 }
