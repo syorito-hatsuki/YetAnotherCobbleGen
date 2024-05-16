@@ -25,6 +25,8 @@ interface ImplementedInventory : SidedInventory {
 
     override fun getStack(slot: Int): ItemStack = items[slot]
 
+    override fun getMaxCountPerStack(): Int = 1024
+
     override fun removeStack(slot: Int, amount: Int): ItemStack {
         Inventories.splitStack(items, slot, amount).apply {
             if (!isEmpty) markDirty()
