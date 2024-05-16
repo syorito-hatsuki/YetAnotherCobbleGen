@@ -35,7 +35,6 @@ import net.minecraft.world.World
 open class GeneratorBlock(internal val type: String) :
     BlockWithEntity(Settings.create().strength(2f).requiresTool()), BlockEntityProvider {
     companion object {
-
         val ENABLED: BooleanProperty = Properties.ENABLED
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
     }
@@ -60,7 +59,7 @@ open class GeneratorBlock(internal val type: String) :
             return
         }
 
-        GeneratorsConfig.getBlocks(type)?.forEach {
+        GeneratorsConfig.getBlocks(type).forEach {
             tooltip.generatorChancesTooltip(it.coefficient, it.itemId)
         }
     }
@@ -120,6 +119,10 @@ open class GeneratorBlock(internal val type: String) :
 
                 UpgradeItem.UpgradesTypes.SPEED -> world.spawnEntity(
                     ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.SPEED_UPGRADE))
+                )
+
+                UpgradeItem.UpgradesTypes.ENERGY_FREE -> world.spawnEntity(
+                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.ENERGY_FREE_UPGRADE))
                 )
             }
         }

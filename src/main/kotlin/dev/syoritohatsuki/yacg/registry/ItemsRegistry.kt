@@ -15,6 +15,7 @@ object ItemsRegistry {
     val COEFFICIENT_UPGRADE = UpgradeItem(UpgradeItem.UpgradesTypes.COEFFICIENT).create("upgrade_coefficient")
     val COUNT_UPGRADE = UpgradeItem(UpgradeItem.UpgradesTypes.COUNT).create("upgrade_count")
     val SPEED_UPGRADE = UpgradeItem(UpgradeItem.UpgradesTypes.SPEED).create("upgrade_speed")
+    val ENERGY_FREE_UPGRADE = UpgradeItem(UpgradeItem.UpgradesTypes.ENERGY_FREE).create("energy_free")
 
     init {
         ITEMS.keys.forEach { item ->

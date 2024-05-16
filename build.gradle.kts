@@ -39,6 +39,8 @@ dependencies {
 
     modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
+    include(modApi("teamreborn", "energy", "3.0.0"))
+
     val emiVersion: String by project
     modCompileOnly("dev.emi:emi-fabric:$emiVersion:api")
     modLocalRuntime("dev.emi", "emi-fabric", emiVersion)

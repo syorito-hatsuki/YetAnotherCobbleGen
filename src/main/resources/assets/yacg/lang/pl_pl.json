@@ -2,12 +2,14 @@
   "block.yacg.cobble": "Generator Bruku",
   "block.yacg.ore": "Generator Rudy",
   "block.yacg.stone": "Generator Kamienia",
+  "emi.category.yacg.generators": "Generatory Zasobów",
+  "item.yacg.upgrade_energy_free": "Upgrade: Energy Free (Not translated)",
+  "item.yacg.upgrade_energy_free.tooltip": "Generators not need energy anymore (Not translated)",
   "item.yacg.hidden.tooltip": "Przytrzymaj [%s] żeby zobaczyć dodatkowe informacje",
-  "item.yacg.upgrade_speed": "Ulepszenie: Prędkość",
-  "item.yacg.upgrade_speed.tooltip": "Podziel opóźnienie pomiędzy generacjami przez %s",
   "item.yacg.upgrade_coefficient": "Ulepszenie: Mzożnik",
   "item.yacg.upgrade_coefficient.tooltip": "Pomnóż szanse generacji przez %s dla generacji które sa poniżej 50%s",
   "item.yacg.upgrade_count": "Ulepszenie: Liczba",
   "item.yacg.upgrade_count.tooltip": "Pomnoż liczbe generacji przez %s",
-  "emi.category.yacg.generators": "Generatory Zasobów"
+  "item.yacg.upgrade_speed": "Ulepszenie: Prędkość",
+  "item.yacg.upgrade_speed.tooltip": "Podziel opóźnienie pomiędzy generacjami przez %s"
 }

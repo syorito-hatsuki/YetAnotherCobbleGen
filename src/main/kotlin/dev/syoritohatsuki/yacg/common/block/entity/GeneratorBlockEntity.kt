@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import team.reborn.energy.api.base.SimpleEnergyStorage
 import kotlin.random.Random
 
 class GeneratorBlockEntity(
@@ -25,53 +26,74 @@ class GeneratorBlockEntity(
 ) : BlockEntity(BlocksEntityRegistry.GENERATOR_ENTITY, blockPos, blockState), ImplementedInventory {
 
     private var progress: Byte = 0
-    private val maxProcess: Byte = 20
 
     val listUpgrades: MutableList<UpgradesTypes> = mutableListOf()
 
     private var countMultiply: Byte = 1
     private var coefficientMultiply: Byte = 1
     private var speedDivider: Byte = 1
+    private var energyRequired = true
+    private var energyUsage = 0
 
     private val inventory = DefaultedList.ofSize(255, ItemStack.EMPTY)
 
+    val energyStorage: SimpleEnergyStorage = object : SimpleEnergyStorage(10000, 1000, 0) {
+        override fun onFinalCommit() {
+            markDirty()
+        }
+    }
+
     companion object {
+        private const val MAX_PROGRESS: Byte = 20
 
         fun tick(world: World, blockPos: BlockPos, blockState: BlockState, entity: GeneratorBlockEntity) {
 
             if (world.isClient) return
 
-            if (entity.progress < 0) entity.progress = 0
+            // Disabled by redstone
+            if (!blockState.get(GeneratorBlock.ENABLED)) return
 
-            if (entity.progress == (entity.maxProcess / entity.speedDivider).toByte()) {
+            // Reset progress if going out of range
+            if (entity.progress !in 0..20) entity.progress = 0
 
-                if (!blockState.get(GeneratorBlock.ENABLED)) return
+            // Energy required and amount less that required
+            if (entity.energyRequired && entity.energyStorage.amount < entity.energyUsage) return
 
-                val randomBlock = getRandomBlock(
-                    entity.type, GeneratorsConfig.getBlocks(entity.type) ?: return, entity.coefficientMultiply
-                ) ?: return
+            // Progress is equals required
+            if (entity.progress == (MAX_PROGRESS / entity.speedDivider).toByte()) {
 
-                if (!entity.inventory.none { it.isOf(randomBlock.item) }) {
-                    val slot = entity.inventory.indexOfFirst { it.isOf(randomBlock.item) }
+                // Get random block from setOf blocks from config
+                val randomBlock =
+                    getRandomBlock(entity.type, GeneratorsConfig.getBlocks(entity.type), entity.coefficientMultiply)
+                        ?: return
 
+                // Check if item already exists in any slot (Max cap per slot 1024)
+                entity.inventory.firstOrNull { it.isOf(randomBlock.item) }?.let { existingItem ->
                     entity.setStack(
-                        slot,
-                        randomBlock.copyWithCount(entity.inventory[slot].count + (randomBlock.count * entity.countMultiply))
+                        entity.inventory.indexOf(existingItem),
+                        randomBlock.copyWithCount(existingItem.count + (randomBlock.count * entity.countMultiply))
                     )
-                } else entity.setStack(
-                    getEmptySlot(entity.inventory) ?: return, randomBlock.copyWithCount(entity.countMultiply.toInt())
-                )
+                } ?: getEmptySlot(entity.inventory)?.let { emptySlot ->
+                    entity.setStack(emptySlot, randomBlock.copyWithCount(entity.countMultiply.toInt()))
+                } ?: return
+
+                // Use energy only if required
+                if (entity.energyRequired) entity.energyStorage.amount -= entity.energyUsage
+
                 entity.progress = 0
             }
 
-            entity.progress++
+            // Add progress only if energy not required or amount of energy require for generating
+            if (!entity.energyRequired || entity.energyStorage.amount >= entity.energyUsage) {
+                entity.progress++
+            }
 
             markDirty(world, blockPos, blockState)
         }
 
         private fun getRandomBlock(
             type: String,
-            blocks: Set<GeneratorsConfig.Generators.GenerateItem>,
+            blocks: Set<GeneratorsConfig.Generator.GenerateItem>,
             coefficient: Byte,
         ): ItemStack? {
             if (blocks.isEmpty()) {
@@ -79,11 +101,12 @@ class GeneratorBlockEntity(
                 return null
             }
 
-            blocks.map {
+            if (coefficient > 1) blocks.map {
                 if (it.coefficient < 50) it.coefficient *= coefficient
             }
 
             var randomNumber = Random.nextInt(blocks.sumOf { it.coefficient })
+
             blocks.forEach { block ->
                 if (randomNumber < block.coefficient) return ItemStack(
                     Registries.ITEM.get(Identifier(block.itemId)), block.count
@@ -111,6 +134,7 @@ class GeneratorBlockEntity(
     override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         super.writeNbt(nbt, registryLookup)
         Inventories.writeNbt(nbt, inventory, registryLookup)
+        nbt.putLong("yacg.energy", energyStorage.amount)
         nbt.putByte("yacg.progress", progress)
         nbt.putString("yacg.type", type)
         listUpgrades.let { types ->
@@ -122,6 +146,10 @@ class GeneratorBlockEntity(
 
     override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         Inventories.readNbt(nbt, inventory, registryLookup)
+        energyStorage.amount = nbt.getLong("yacg.energy")
+        progress = nbt.getByte("yacg.progress")
+        type = nbt.getString("yacg.type")
+        energyUsage = GeneratorsConfig.getEnergyUsage(type)
         UpgradesTypes.entries.toTypedArray().let { types ->
             types.forEach {
                 nbt.getString("yacg.upgrade.${it.name.lowercase()}").apply {
@@ -131,8 +159,6 @@ class GeneratorBlockEntity(
             }
         }
         super.readNbt(nbt, registryLookup)
-        type = nbt.getString("yacg.type")
-        progress = nbt.getByte("yacg.progress")
     }
 
     fun insertUpgrade(upgradeType: UpgradesTypes): ActionResult {
@@ -144,6 +170,7 @@ class GeneratorBlockEntity(
             UpgradesTypes.SPEED -> speedDivider = UpgradesConfig.getUpgradeModify(upgradeType) ?: 2
             UpgradesTypes.COEFFICIENT -> coefficientMultiply = UpgradesConfig.getUpgradeModify(upgradeType) ?: 2
             UpgradesTypes.COUNT -> countMultiply = UpgradesConfig.getUpgradeModify(upgradeType) ?: 2
+            UpgradesTypes.ENERGY_FREE -> energyRequired = false
         }
 
         return ActionResult.SUCCESS

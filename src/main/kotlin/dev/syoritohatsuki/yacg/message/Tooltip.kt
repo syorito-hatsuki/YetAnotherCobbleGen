@@ -22,13 +22,19 @@ fun MutableList<Text>.generatorChancesTooltip(coefficient: Int, itemId: String) 
         .append(generationRarityText(coefficient)).append(Text.literal("]")).formatted(Formatting.DARK_GRAY)
 )
 
-fun MutableList<Text>.upgradeItemTooltip(type: String) = add(
-    Text.translatable(
-        "item.yacg.upgrade_${type.lowercase()}.tooltip",
-        UpgradesConfig.getUpgradeModify(UpgradeItem.UpgradesTypes.valueOf(type)),
-        '%'
-    ).formatted(Formatting.YELLOW)
-)
+fun MutableList<Text>.upgradeItemTooltip(type: String) = when {
+    type.equals(
+        UpgradeItem.UpgradesTypes.ENERGY_FREE.name, true
+    ) -> add(Text.translatable("item.yacg.upgrade_${type.lowercase()}.tooltip").formatted(Formatting.YELLOW))
+
+    else -> add(
+        Text.translatable(
+            "item.yacg.upgrade_${type.lowercase()}.tooltip",
+            UpgradesConfig.getUpgradeModify(UpgradeItem.UpgradesTypes.valueOf(type)),
+            '%'
+        ).formatted(Formatting.YELLOW)
+    )
+}
 
 fun generationRarityText(coefficient: Int): Text = when {
     coefficient >= 80 -> Text.literal("Common").formatted(Formatting.GREEN)

@@ -12,7 +12,7 @@ import net.minecraft.util.ActionResult
 class UpgradeItem(val type: UpgradesTypes) : Item(Settings().maxCount(1)) {
 
     enum class UpgradesTypes {
-        COEFFICIENT, COUNT, SPEED
+        COEFFICIENT, COUNT, SPEED, ENERGY_FREE
     }
 
     override fun appendTooltip(
