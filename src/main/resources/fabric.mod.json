@@ -10,7 +10,6 @@
     "Denfop"
   ],
   "contact": {
-    "homepage": "https://syorito-hatsuki.dev/",
     "sources": "https://github.com/syorito-hatsuki/yet-another-cobble-gen",
     "issues": "https://github.com/syorito-hatsuki/yet-another-cobble-gen/issues"
   },
@@ -44,14 +43,17 @@
     ]
   },
   "custom": {
+    "duckyupdater": {
+      "modrinthId": "xPsKRMUF"
+    },
+    "fstats": 32,
     "mcb": [
       {
         "name": "Ducky House",
         "fillColor": -13730510,
         "outlineColor": -11751600
       }
-    ],
-    "fstats": 32
+    ]
   },
   "depends": {
     "fabricloader": ">=${loaderVersion}",
