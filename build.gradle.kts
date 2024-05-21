@@ -50,12 +50,22 @@ dependencies {
     modLocalRuntime("me.shedaniel", "RoughlyEnoughItems-fabric", reiVersion)
     modCompileOnly("me.shedaniel", "RoughlyEnoughItems-api-fabric", reiVersion)
 
-    include(modImplementation("maven.modrinth", "fstats", "2023.12.2"))
+    include(modApi("teamreborn", "energy", "3.0.0"))
+
+    include(modImplementation("maven.modrinth", "fstats", "2023.12.3"))
+
+    include(modImplementation("maven.modrinth", "ducky-updater-lib", "2023.10.1"))
 
     include(modImplementation("maven.modrinth", "modmenu-badges-lib", "2023.6.1"))
 }
 
 tasks {
+
+    task("rebuild") {
+        dependsOn("clean")
+        finalizedBy("build")
+    }
+
     withType<JavaCompile> {
         options.encoding = "UTF-8"
         sourceCompatibility = javaVersion.toString()

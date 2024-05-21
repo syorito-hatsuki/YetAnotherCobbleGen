@@ -12,8 +12,15 @@ import net.minecraft.world.World
 
 class UpgradeItem(val type: UpgradesTypes) : Item(Settings().maxCount(1)) {
 
+    enum class UpgradesTypes {
+        COEFFICIENT, COUNT, SPEED, ENERGY_FREE
+    }
+
     override fun appendTooltip(
-        stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
         super.appendTooltip(stack, world, tooltip, context)
         tooltip.upgradeItemTooltip(type.name)
@@ -28,10 +35,5 @@ class UpgradeItem(val type: UpgradesTypes) : Item(Settings().maxCount(1)) {
         }
 
         return super.useOnBlock(context)
-    }
-
-
-    enum class UpgradesTypes {
-        COEFFICIENT, COUNT, SPEED
     }
 }

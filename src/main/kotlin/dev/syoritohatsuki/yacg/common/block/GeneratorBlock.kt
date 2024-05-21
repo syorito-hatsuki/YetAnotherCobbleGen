@@ -57,7 +57,7 @@ open class GeneratorBlock(internal val type: String) :
             return
         }
 
-        GeneratorsConfig.getBlocks(type)?.forEach {
+        GeneratorsConfig.getBlocks(type).forEach {
             tooltip.generatorChancesTooltip(it.coefficient, it.itemId)
         }
     }
@@ -103,25 +103,19 @@ open class GeneratorBlock(internal val type: String) :
     }
 
     override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
-        super.onBreak(world, pos, state, player)
-        val x = player.x
-        val y = player.y
-        val z = player.z
         (world.getBlockEntity(pos) as GeneratorBlockEntity).listUpgrades.forEach { type ->
-            when (type) {
-                UpgradeItem.UpgradesTypes.COEFFICIENT -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE))
+            world.spawnEntity(
+                ItemEntity(
+                    world, player.x, player.y, player.z, when (type) {
+                        UpgradeItem.UpgradesTypes.COEFFICIENT -> ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE)
+                        UpgradeItem.UpgradesTypes.COUNT -> ItemStack(ItemsRegistry.COUNT_UPGRADE)
+                        UpgradeItem.UpgradesTypes.SPEED -> ItemStack(ItemsRegistry.SPEED_UPGRADE)
+                        UpgradeItem.UpgradesTypes.ENERGY_FREE -> ItemStack(ItemsRegistry.ENERGY_FREE_UPGRADE)
+                    }
                 )
-
-                UpgradeItem.UpgradesTypes.COUNT -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.COUNT_UPGRADE))
-                )
-
-                UpgradeItem.UpgradesTypes.SPEED -> world.spawnEntity(
-                    ItemEntity(world, x, y, z, ItemStack(ItemsRegistry.SPEED_UPGRADE))
-                )
-            }
+            )
         }
+        super.onBreak(world, pos, state, player)
     }
 
     override fun onUse(
@@ -137,7 +131,7 @@ open class GeneratorBlock(internal val type: String) :
                         .formatted(Formatting.AQUA)
                 )
                 blockEntity.items.forEach {
-                    if (it.item is UpgradeItem || it.item == Items.AIR) return@forEach
+                    if (it.item == Items.AIR) return@forEach
                     message.append("\n - ${it.item.name.string} x${it.count}")
                 }
                 player.sendMessage(message, false)
@@ -147,7 +141,7 @@ open class GeneratorBlock(internal val type: String) :
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
-        GeneratorBlockEntity(pos, state, type)
+        GeneratorBlockEntity(pos, state, type, GeneratorsConfig.getEnergyUsage(type))
 
     override fun <T : BlockEntity> getTicker(
         world: World, state: BlockState, type: BlockEntityType<T>

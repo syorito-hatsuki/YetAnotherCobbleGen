@@ -32,6 +32,8 @@ interface ImplementedInventory : SidedInventory {
         }
     }
 
+    override fun getMaxCountPerStack(): Int = 1024
+
     override fun removeStack(slot: Int): ItemStack = Inventories.removeStack(items, slot)
 
     override fun setStack(slot: Int, stack: ItemStack) {

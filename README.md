@@ -89,9 +89,10 @@ of block. That's why I made my own mod, with a wide range of customization optio
 
 ### Crafts
 
-| ![Cobblestone Generator Craft](./assets/recipes/cobble.png) | ![Ore Generator Craft](./assets/recipes/ore.png)   | ![Stone Generator Craft](./assets/recipes/stone.png)           |
-|-------------------------------------------------------------|----------------------------------------------------|----------------------------------------------------------------|
-| ![Speed Upgrade Craft](./assets/recipes/speed.png)          | ![Count Upgrade Craft](./assets/recipes/count.png) | ![Coefficient Upgrade Craft](./assets/recipes/coefficient.png) |
+| ![Cobblestone Generator Craft](./assets/recipes/cobble.png)    | ![Ore Generator Craft](./assets/recipes/ore.png)   | ![Stone Generator Craft](./assets/recipes/stone.png)           |
+|----------------------------------------------------------------|----------------------------------------------------|----------------------------------------------------------------|
+| ![Speed Upgrade Craft](./assets/recipes/speed.png)             | ![Count Upgrade Craft](./assets/recipes/count.png) | ![Coefficient Upgrade Craft](./assets/recipes/coefficient.png) |
+| ![Energy Free Upgrade Craft](./assets/recipes/energy_free.png) |                                                    |                                                                |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -115,6 +116,129 @@ of block. That's why I made my own mod, with a wide range of customization optio
 
 <details>
   <summary>Generators default config</summary>
+
+```json
+[
+  {
+    "type": "cobble",
+    "energyUsage": 0,
+    "items": [
+      {
+        "itemId": "minecraft:cobblestone",
+        "coefficient": 100,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:cobbled_deepslate",
+        "coefficient": 30,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:mossy_cobblestone",
+        "coefficient": 10,
+        "count": 1
+      }
+    ]
+  },
+  {
+    "type": "ore",
+    "energyUsage": 0,
+    "items": [
+      {
+        "itemId": "minecraft:coal_ore",
+        "coefficient": 100,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:copper_ore",
+        "coefficient": 70,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:iron_ore",
+        "coefficient": 50,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:gold_ore",
+        "coefficient": 30,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:redstone_ore",
+        "coefficient": 20,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:lapis_ore",
+        "coefficient": 20,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:diamond_ore",
+        "coefficient": 15,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:emerald_ore",
+        "coefficient": 10,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:nether_quartz_ore",
+        "coefficient": 5,
+        "count": 1
+      }
+    ]
+  },
+  {
+    "type": "stone",
+    "energyUsage": 0,
+    "items": [
+      {
+        "itemId": "minecraft:stone",
+        "coefficient": 100,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:diorite",
+        "coefficient": 50,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:granite",
+        "coefficient": 50,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:andesite",
+        "coefficient": 50,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:calcite",
+        "coefficient": 20,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:dripstone_block",
+        "coefficient": 20,
+        "count": 1
+      },
+      {
+        "itemId": "minecraft:deepslate",
+        "coefficient": 5,
+        "count": 1
+      }
+    ]
+  }
+]
+```
+
+</details>
+
+<details>
+  <summary>Generators default config (Before 2024.5.2)</summary>
 
 ```json
 {
@@ -225,6 +349,7 @@ of block. That's why I made my own mod, with a wide range of customization optio
 ```
 
 </details>
+
 
 <details>
     <summary>Upgrades default config</summary>

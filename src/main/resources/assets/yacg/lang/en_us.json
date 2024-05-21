@@ -2,12 +2,14 @@
   "block.yacg.cobble": "Cobble Generator",
   "block.yacg.ore": "Ore Generator",
   "block.yacg.stone": "Stone Generator",
+  "emi.category.yacg.generators": "Resource Generators",
+  "item.yacg.upgrade_energy_free": "Upgrade: Energy Free",
+  "item.yacg.upgrade_energy_free.tooltip": "Generators not need energy anymore",
   "item.yacg.hidden.tooltip": "Press [%s] to see additional info",
-  "item.yacg.upgrade_speed": "Upgrade: Speed",
-  "item.yacg.upgrade_speed.tooltip": "Divide delay by %s between generations",
   "item.yacg.upgrade_coefficient": "Upgrade: Coefficient",
   "item.yacg.upgrade_coefficient.tooltip": "Multiply chance by %s for generations that below 50%s",
   "item.yacg.upgrade_count": "Upgrade: Count",
   "item.yacg.upgrade_count.tooltip": "Multiply generations count by %s",
-  "emi.category.yacg.generators": "Resource Generators"
+  "item.yacg.upgrade_speed": "Upgrade: Speed",
+  "item.yacg.upgrade_speed.tooltip": "Divide delay by %s between generations"
 }

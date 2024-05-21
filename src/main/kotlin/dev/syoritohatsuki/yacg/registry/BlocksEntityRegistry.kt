@@ -7,6 +7,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
+import team.reborn.energy.api.EnergyStorage
 
 object BlocksEntityRegistry {
     val GENERATOR_ENTITY: BlockEntityType<GeneratorBlockEntity> = Registry.register(
@@ -16,4 +17,10 @@ object BlocksEntityRegistry {
             ::GeneratorBlockEntity, *BlocksRegistry.BLOCKS.keys.toTypedArray()
         ).build()
     )
+
+    init {
+        EnergyStorage.SIDED.registerForBlockEntity({ blockEntity, _ ->
+            blockEntity.energyStorage
+        }, GENERATOR_ENTITY)
+    }
 }

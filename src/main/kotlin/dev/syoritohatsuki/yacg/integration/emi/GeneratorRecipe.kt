@@ -7,12 +7,13 @@ import dev.emi.emi.api.recipe.EmiResolutionRecipe
 import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.syoritohatsuki.yacg.YetAnotherCobblestoneGenerator.MOD_ID
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig.Generators.GenerateItem
+import dev.syoritohatsuki.yacg.config.GeneratorsConfig
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
-class GeneratorRecipe(private val type: String, private val items: Set<GenerateItem>) : EmiIngredientRecipe() {
+class GeneratorRecipe(private val type: String, private val items: Set<GeneratorsConfig.Generator.GenerateItem>) :
+    EmiIngredientRecipe() {
     override fun getCategory(): EmiRecipeCategory = YacgEmiPlugin.GENERATORS_CATEGORY
 
     override fun getId(): Identifier = Identifier("emi", "$MOD_ID/$type/${category.id.path}")
