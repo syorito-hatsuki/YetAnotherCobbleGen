@@ -23,7 +23,7 @@ object YacgEmiPlugin : EmiPlugin {
         }
 
         GeneratorsConfig.getTypes().forEach { type ->
-            registry.addRecipe(GeneratorRecipe(type, GeneratorsConfig.getBlocks(type) ?: return@forEach))
+            registry.addRecipe(GeneratorRecipe(type, GeneratorsConfig.getBlocks(type)))
         }
     }
 }
