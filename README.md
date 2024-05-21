@@ -89,9 +89,10 @@ of block. That's why I made my own mod, with a wide range of customization optio
 
 ### Crafts
 
-| ![Cobblestone Generator Craft](./assets/recipes/cobble.png) | ![Ore Generator Craft](./assets/recipes/ore.png)   | ![Stone Generator Craft](./assets/recipes/stone.png)           |
-|-------------------------------------------------------------|----------------------------------------------------|----------------------------------------------------------------|
-| ![Speed Upgrade Craft](./assets/recipes/speed.png)          | ![Count Upgrade Craft](./assets/recipes/count.png) | ![Coefficient Upgrade Craft](./assets/recipes/coefficient.png) |
+| ![Cobblestone Generator Craft](./assets/recipes/cobble.png)    | ![Ore Generator Craft](./assets/recipes/ore.png)   | ![Stone Generator Craft](./assets/recipes/stone.png)           |
+|----------------------------------------------------------------|----------------------------------------------------|----------------------------------------------------------------|
+| ![Speed Upgrade Craft](./assets/recipes/speed.png)             | ![Count Upgrade Craft](./assets/recipes/count.png) | ![Coefficient Upgrade Craft](./assets/recipes/coefficient.png) |
+| ![Energy Free Upgrade Craft](./assets/recipes/energy_free.png) |                                                    |                                                                |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -139,7 +140,7 @@ of block. That's why I made my own mod, with a wide range of customization optio
     "ore": [
       {
         "itemId": "minecraft:coal_ore",
-        "coefficient": 100,
+        "coefficient": 0,
         "count": 1
       },
       {

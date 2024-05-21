@@ -22,7 +22,7 @@ import team.reborn.energy.api.base.SimpleEnergyStorage
 import kotlin.random.Random
 
 class GeneratorBlockEntity(
-    blockPos: BlockPos, blockState: BlockState, private var type: String = ""
+    blockPos: BlockPos, blockState: BlockState, private var type: String = "", private var energyUsage: Int = 0
 ) : BlockEntity(BlocksEntityRegistry.GENERATOR_ENTITY, blockPos, blockState), ImplementedInventory {
 
     private var progress: Byte = 0
@@ -33,7 +33,6 @@ class GeneratorBlockEntity(
     private var coefficientMultiply: Byte = 1
     private var speedDivider: Byte = 1
     private var energyRequired = true
-    private var energyUsage = 0
 
     private val inventory = DefaultedList.ofSize(255, ItemStack.EMPTY)
 

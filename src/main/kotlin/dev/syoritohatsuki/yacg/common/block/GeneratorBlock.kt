@@ -143,7 +143,7 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
-        GeneratorBlockEntity(pos, state, type)
+        GeneratorBlockEntity(pos, state, type, GeneratorsConfig.getEnergyUsage(type))
 
     override fun <T : BlockEntity> getTicker(
         world: World, state: BlockState, type: BlockEntityType<T>
