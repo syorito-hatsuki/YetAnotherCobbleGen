@@ -1,0 +1,15 @@
+{
+  "block.yacg.cobble": "Générateur de pierre",
+  "block.yacg.ore": "Générateur de minerais",
+  "block.yacg.stone": "Générateur de roche",
+  "emi.category.yacg.generators": "Générateurs de ressources",
+  "item.yacg.upgrade_energy_free": "Amélioration : Sans énergie",
+  "item.yacg.upgrade_energy_free.tooltip": "Les générateurs n'ont plus besoin d'énergie",
+  "item.yacg.hidden.tooltip": "Appuyez sur [%s] pour voir des informations supplémentaires",
+  "item.yacg.upgrade_coefficient": "Amélioration : Coefficient",
+  "item.yacg.upgrade_coefficient.tooltip": "Multiplie la chance par %s pour les générations inférieures à 50%s",
+  "item.yacg.upgrade_count": "Amélioration : Compte",
+  "item.yacg.upgrade_count.tooltip": "Multiplie le nombre de générations par %s",
+  "item.yacg.upgrade_speed": "Amélioration : Vitesse",
+  "item.yacg.upgrade_speed.tooltip": "Divise le délai par %s entre les générations"
+}

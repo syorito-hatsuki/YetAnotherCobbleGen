@@ -1,0 +1,15 @@
+{
+  "block.yacg.cobble": "Генератор булыжника",
+  "block.yacg.ore": "Генератор руды",
+  "block.yacg.stone": "Генератор камня",
+  "emi.category.yacg.generators": "Генераторы ресурсов",
+  "item.yacg.upgrade_energy_free": "Обновление: Бесплатная энергия",
+  "item.yacg.upgrade_energy_free.tooltip": "Генераторы больше не требуют энергии",
+  "item.yacg.hidden.tooltip": "Нажмите [%s], чтобы увидеть дополнительную информацию",
+  "item.yacg.upgrade_coefficient": "Обновление: Множитель",
+  "item.yacg.upgrade_coefficient.tooltip": "Умножает шанс появления на %s для генераций ниже 50%s",
+  "item.yacg.upgrade_count": "Обновление: Количество",
+  "item.yacg.upgrade_count.tooltip": "Умножает количество генераций на %s",
+  "item.yacg.upgrade_speed": "Обновление: Скорость",
+  "item.yacg.upgrade_speed.tooltip": "Делит задержку на %s между генерациями"
+}
