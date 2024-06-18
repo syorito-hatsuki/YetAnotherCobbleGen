@@ -2,10 +2,10 @@ package dev.syoritohatsuki.yacg.common.item
 
 import dev.syoritohatsuki.yacg.common.block.entity.GeneratorBlockEntity
 import dev.syoritohatsuki.yacg.message.upgradeItemTooltip
-import net.minecraft.client.item.TooltipType
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 

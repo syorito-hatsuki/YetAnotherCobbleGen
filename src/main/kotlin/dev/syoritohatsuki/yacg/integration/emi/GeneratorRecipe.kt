@@ -16,14 +16,14 @@ class GeneratorRecipe(private val type: String, private val items: Set<Generator
     EmiIngredientRecipe() {
     override fun getCategory(): EmiRecipeCategory = YacgEmiPlugin.GENERATORS_CATEGORY
 
-    override fun getId(): Identifier = Identifier("emi", "$MOD_ID/$type/${category.id.path}")
+    override fun getId(): Identifier = Identifier.of("emi", "$MOD_ID/$type/${category.id.path}")
 
-    override fun getIngredient(): EmiIngredient = EmiStack.of(Registries.ITEM.get(Identifier(MOD_ID, type)))
+    override fun getIngredient(): EmiIngredient = EmiStack.of(Registries.ITEM.get(Identifier.of(MOD_ID, type)))
 
     override fun getInputs(): List<EmiIngredient> = emptyList()
 
     override fun getOutputs(): List<EmiStack> = items.map {
-        EmiStack.of(ItemStack(Registries.ITEM.get(Identifier(it.itemId)), it.count))
+        EmiStack.of(ItemStack(Registries.ITEM.get(Identifier.of(it.itemId)), it.count))
     }
 
     override fun getStacks(): List<EmiStack> = outputs

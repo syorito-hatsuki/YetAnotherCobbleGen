@@ -27,6 +27,6 @@ object ItemsRegistry {
     }
 
     private fun Item.create(id: String): Item = this.apply {
-        ITEMS[this] = Identifier(MOD_ID, id)
+        ITEMS[this] = Identifier.of(MOD_ID, id)
     }
 }

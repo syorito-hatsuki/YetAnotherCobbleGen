@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier
 
 object ItemGroupsRegistry {
 
-    val YACG_ITEM_GROUP: RegistryKey<ItemGroup> = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier(MOD_ID, MOD_ID))
+    val YACG_ITEM_GROUP: RegistryKey<ItemGroup> = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, MOD_ID))
 
     init {
         Registry.register(Registries.ITEM_GROUP, YACG_ITEM_GROUP, FabricItemGroup.builder().icon {

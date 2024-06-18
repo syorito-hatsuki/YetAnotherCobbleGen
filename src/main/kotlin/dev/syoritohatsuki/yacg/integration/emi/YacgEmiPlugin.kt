@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier
 
 object YacgEmiPlugin : EmiPlugin {
 
-    private val GENERATORS_ID = Identifier(MOD_ID, "generators")
+    private val GENERATORS_ID = Identifier.of(MOD_ID, "generators")
 
     val GENERATORS_CATEGORY = EmiRecipeCategory(GENERATORS_ID, EmiStack.of(BlocksRegistry.BLOCKS.keys.random()))
 

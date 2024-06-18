@@ -18,7 +18,7 @@ fun MutableList<Text>.hiddenTooltip() = add(
 )
 
 fun MutableList<Text>.generatorChancesTooltip(coefficient: Int, itemId: String) = add(
-    Text.literal(" - ").append(Registries.ITEM.get(Identifier(itemId)).name).append(Text.literal(" ["))
+    Text.literal(" - ").append(Registries.ITEM.get(Identifier.of(itemId)).name).append(Text.literal(" ["))
         .append(generationRarityText(coefficient)).append(Text.literal("]")).formatted(Formatting.DARK_GRAY)
 )
 

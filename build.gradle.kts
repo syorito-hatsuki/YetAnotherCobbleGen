@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("fabric-loom")
     kotlin("jvm")
@@ -39,7 +41,7 @@ dependencies {
 
     modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
-    include(modApi("teamreborn", "energy", "4.0.0"))
+    include(modApi("teamreborn", "energy", "4.1.0"))
 
     val emiVersion: String by project
     modCompileOnly("dev.emi:emi-fabric:$emiVersion:api")
@@ -73,8 +75,8 @@ tasks {
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = javaVersion.toString()
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 

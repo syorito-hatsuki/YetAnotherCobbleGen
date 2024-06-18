@@ -2,6 +2,7 @@
   "block.yacg.cobble": "Cobble Generator",
   "block.yacg.ore": "Ore Generator",
   "block.yacg.stone": "Stone Generator",
+  "config.jade.plugin_yacg.generators": "Yet Another Cobblestone Generator",
   "emi.category.yacg.generators": "Resource Generators",
   "item.yacg.upgrade_energy_free": "Upgrade: Energy Free",
   "item.yacg.upgrade_energy_free.tooltip": "Generators not need energy anymore",

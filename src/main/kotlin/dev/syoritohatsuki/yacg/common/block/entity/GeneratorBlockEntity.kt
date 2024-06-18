@@ -22,7 +22,7 @@ import team.reborn.energy.api.base.SimpleEnergyStorage
 import kotlin.random.Random
 
 class GeneratorBlockEntity(
-    blockPos: BlockPos, blockState: BlockState, private var type: String = "", private var energyUsage: Int = 0
+    blockPos: BlockPos, blockState: BlockState, private var type: String = "", var energyUsage: Int = 0
 ) : BlockEntity(BlocksEntityRegistry.GENERATOR_ENTITY, blockPos, blockState), ImplementedInventory {
 
     private var progress: Byte = 0
@@ -108,7 +108,7 @@ class GeneratorBlockEntity(
 
             blocks.forEach { block ->
                 if (randomNumber < block.coefficient) return ItemStack(
-                    Registries.ITEM.get(Identifier(block.itemId)), block.count
+                    Registries.ITEM.get(Identifier.of(block.itemId)), block.count
                 )
                 randomNumber -= block.coefficient
             }

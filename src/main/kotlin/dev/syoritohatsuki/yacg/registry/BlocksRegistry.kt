@@ -29,6 +29,6 @@ object BlocksRegistry {
     }
 
     private fun Block.create(): Block = this.apply {
-        BLOCKS[this] = Identifier(MOD_ID, (this as GeneratorBlock).type)
+        BLOCKS[this] = Identifier.of(MOD_ID, (this as GeneratorBlock).type)
     }
 }

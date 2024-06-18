@@ -94,7 +94,6 @@ object GeneratorsConfig {
     }
 
     fun getEnergyUsage(type: String) = json.decodeFromString<Set<Generator>>(configFile.readText()).find {
-        println("Q: $type | R: ${it.type}")
         it.type == type
     }?.energyUsage ?: 0
 

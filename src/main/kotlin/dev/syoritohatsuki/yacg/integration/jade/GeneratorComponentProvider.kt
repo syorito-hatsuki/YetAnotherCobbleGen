@@ -7,13 +7,16 @@ import dev.syoritohatsuki.yacg.registry.ItemsRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.Identifier
-import snownee.jade.api.*
+import snownee.jade.api.BlockAccessor
+import snownee.jade.api.IBlockComponentProvider
+import snownee.jade.api.IServerDataProvider
+import snownee.jade.api.ITooltip
 import snownee.jade.api.config.IPluginConfig
 import snownee.jade.api.ui.IElementHelper
 
 object GeneratorComponentProvider : IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
-    override fun getUid(): Identifier = Identifier(MOD_ID, "generators")
+    override fun getUid(): Identifier = Identifier.of(MOD_ID, "generators")
 
     override fun appendServerData(data: NbtCompound, accessor: BlockAccessor) {
         data.putBoolean("coefficient", false)
@@ -31,12 +34,7 @@ object GeneratorComponentProvider : IBlockComponentProvider, IServerDataProvider
     }
 
     override fun appendTooltip(tooltip: ITooltip, accessor: BlockAccessor, config: IPluginConfig) {
-        val energy = tooltip.get(Identifiers.UNIVERSAL_ENERGY_STORAGE)
         val elements = IElementHelper.get()
-
-        // Remove the origin energy bar and add it later.
-        // Require for sorting, maybe exist better way, but not in documentation ¯\_(ツ)_/¯
-        tooltip.remove(Identifiers.UNIVERSAL_ENERGY_STORAGE)
 
         if (accessor.serverData.getBoolean("coefficient")) tooltip.append(
             elements.item(ItemStack(ItemsRegistry.COEFFICIENT_UPGRADE), 0.5f)
@@ -49,8 +47,6 @@ object GeneratorComponentProvider : IBlockComponentProvider, IServerDataProvider
         )
         if (accessor.serverData.getBoolean("energy_free")) tooltip.append(
             elements.item(ItemStack(ItemsRegistry.ENERGY_FREE_UPGRADE), 0.5f)
-        ) else energy.forEach {
-            tooltip.add(it)
-        }
+        )
     }
 }

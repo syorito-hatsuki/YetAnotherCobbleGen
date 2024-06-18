@@ -11,7 +11,7 @@ import team.reborn.energy.api.EnergyStorage
 object BlocksEntityRegistry {
     val GENERATOR_ENTITY: BlockEntityType<GeneratorBlockEntity> = Registry.register(
         Registries.BLOCK_ENTITY_TYPE,
-        Identifier(YetAnotherCobblestoneGenerator.MOD_ID, "generator_block_entity"),
+        Identifier.of(YetAnotherCobblestoneGenerator.MOD_ID, "generator_block_entity"),
         BlockEntityType.Builder.create(::GeneratorBlockEntity, *BlocksRegistry.BLOCKS.keys.toTypedArray()).build()
     )
 
