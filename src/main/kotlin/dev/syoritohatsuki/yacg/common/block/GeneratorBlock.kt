@@ -20,6 +20,7 @@ import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.DirectionProperty
@@ -149,4 +150,8 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
         world: World, state: BlockState, type: BlockEntityType<T>
     ): BlockEntityTicker<T>? = validateTicker(type, BlocksEntityRegistry.GENERATOR_ENTITY, GeneratorBlockEntity::tick)
 
+    override fun getDroppedStacks(
+        state: BlockState,
+        builder: LootContextParameterSet.Builder
+    ): MutableList<ItemStack> = mutableListOf(this.asItem().defaultStack)
 }
