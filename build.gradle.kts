@@ -55,7 +55,7 @@ dependencies {
     modCompileOnly("me.shedaniel", "RoughlyEnoughItems-api-fabric", reiVersion)
     modCompileOnly("me.shedaniel", "RoughlyEnoughItems-default-plugin-fabric", reiVersion)
 
-    modApi("me.shedaniel.cloth:cloth-config-fabric:+") {
+    modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.140") {
         exclude(group = "net.fabricmc.fabric-api")
     }
 
