@@ -55,6 +55,9 @@
       }
     ]
   },
+  "mixins": [
+    "yacg.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loaderVersion}",
     "fabric": "*",
