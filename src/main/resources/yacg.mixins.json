@@ -10,6 +10,8 @@
   ],
   "client": [
     "client.render.model.BlockStatesLoaderMixin",
-    "client.render.model.ModelLoaderMixin"
+    "client.render.model.ModelLoaderMixin",
+    "client.texture.SpriteLoaderMixin",
+    "client.texture.atlas.AtlasLoaderMixin"
   ]
 }
