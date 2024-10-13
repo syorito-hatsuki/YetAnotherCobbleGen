@@ -93,6 +93,8 @@ object GeneratorsConfig {
         }
     }
 
+    fun getCustomTypes(): Set<String> = getTypes().filterNot { type -> defaultConfig.any { it.type == type } }.toSet()
+
     fun getEnergyUsage(type: String) = json.decodeFromString<Set<Generator>>(configFile.readText()).find {
         it.type == type
     }?.energyUsage ?: 0
