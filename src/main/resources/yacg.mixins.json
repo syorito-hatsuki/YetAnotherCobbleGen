@@ -11,6 +11,7 @@
   "client": [
     "client.render.model.BlockStatesLoaderMixin",
     "client.render.model.ModelLoaderMixin",
+    "client.resource.language.TranslationStorageMixin",
     "client.texture.SpriteLoaderMixin",
     "client.texture.atlas.AtlasLoaderMixin"
   ]
