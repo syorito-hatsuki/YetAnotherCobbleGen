@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Mixin(AtlasLoader.class)
 public class AtlasLoaderMixin {
-    @Inject(method = "loadSources", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList$Builder;addAll(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableList$Builder;"))
+    @Inject(method = "loadSources", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList$Builder;addAll(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableList$Builder;", remap = false))
     private void loadGenerators(ResourceManager resourceManager, CallbackInfoReturnable<List<Function<SpriteOpener, SpriteContents>>> cir, @Local ImmutableList.Builder<Function<SpriteOpener, SpriteContents>> builder) {
         GeneratorSprite.INSTANCE.getGeneratorSpriteContents().forEach(spriteContents -> builder.add(spriteOpener -> spriteContents));
     }
