@@ -1,7 +1,7 @@
 {
-  "block.yacg.cobble": "Generator Bruku",
-  "block.yacg.ore": "Generator Rudy",
-  "block.yacg.stone": "Generator Kamienia",
+  "block.yacg.yacg_cobble": "Generator Bruku",
+  "block.yacg.yacg_ore": "Generator Rudy",
+  "block.yacg.yacg_stone": "Generator Kamienia",
   "emi.category.yacg.generators": "Generatory Zasobów",
   "item.yacg.upgrade_energy_free": "Upgrade: Energy Free (Not translated)",
   "item.yacg.upgrade_energy_free.tooltip": "Generators not need energy anymore (Not translated)",

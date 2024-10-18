@@ -1,7 +1,7 @@
 {
-  "block.yacg.cobble": "Генератор булыжника",
-  "block.yacg.ore": "Генератор руды",
-  "block.yacg.stone": "Генератор камня",
+  "block.yacg.yacg_cobble": "Генератор булыжника",
+  "block.yacg.yacg_ore": "Генератор руды",
+  "block.yacg.yacg_stone": "Генератор камня",
   "emi.category.yacg.generators": "Генераторы ресурсов",
   "item.yacg.upgrade_energy_free": "Обновление: Бесплатная энергия",
   "item.yacg.upgrade_energy_free.tooltip": "Генераторы больше не требуют энергии",

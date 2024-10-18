@@ -1,7 +1,7 @@
 {
-  "block.yacg.cobble": "Générateur de pierre",
-  "block.yacg.ore": "Générateur de minerais",
-  "block.yacg.stone": "Générateur de roche",
+  "block.yacg.yacg_cobble": "Générateur de pierre",
+  "block.yacg.yacg_ore": "Générateur de minerais",
+  "block.yacg.yacg_stone": "Générateur de roche",
   "emi.category.yacg.generators": "Générateurs de ressources",
   "item.yacg.upgrade_energy_free": "Amélioration : Sans énergie",
   "item.yacg.upgrade_energy_free.tooltip": "Les générateurs n'ont plus besoin d'énergie",
