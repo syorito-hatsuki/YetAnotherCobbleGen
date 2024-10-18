@@ -5,7 +5,8 @@ import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.recipe.EmiRecipeCategory
 import dev.emi.emi.api.stack.EmiStack
 import dev.syoritohatsuki.yacg.YetAnotherCobblestoneGenerator.MOD_ID
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig
+import dev.syoritohatsuki.yacg.util.BuildInGenerators
+import dev.syoritohatsuki.yacg.config.GeneratorsManager
 import dev.syoritohatsuki.yacg.registry.BlocksRegistry
 import net.minecraft.util.Identifier
 
@@ -22,8 +23,13 @@ object YacgEmiPlugin : EmiPlugin {
             registry.addWorkstation(GENERATORS_CATEGORY, EmiStack.of(it))
         }
 
-        GeneratorsConfig.getTypes().forEach { type ->
-            registry.addRecipe(GeneratorRecipe(type, GeneratorsConfig.getBlocks(type)))
+        GeneratorsManager.dedicatedGenerators.forEach { id ->
+            registry.addRecipe(GeneratorRecipe(id, GeneratorsManager.getItems(id)))
+        }
+
+        BuildInGenerators.buildInGenerators.keys.forEach { generator ->
+            val id = Identifier.of(MOD_ID, generator)
+            registry.addRecipe(GeneratorRecipe(id, GeneratorsManager.getItems(id)))
         }
     }
 }

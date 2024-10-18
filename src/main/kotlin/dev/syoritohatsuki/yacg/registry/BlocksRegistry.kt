@@ -2,7 +2,8 @@ package dev.syoritohatsuki.yacg.registry
 
 import dev.syoritohatsuki.yacg.YetAnotherCobblestoneGenerator.MOD_ID
 import dev.syoritohatsuki.yacg.common.block.GeneratorBlock
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig
+import dev.syoritohatsuki.yacg.util.BuildInGenerators
+import dev.syoritohatsuki.yacg.config.GeneratorsManager
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem
@@ -15,7 +16,11 @@ object BlocksRegistry {
     val BLOCKS: MutableMap<Block, Identifier> = LinkedHashMap()
 
     init {
-        GeneratorsConfig.getTypes().forEach {
+        BuildInGenerators.buildInGenerators.keys.forEach {
+            GeneratorBlock(Identifier.of(MOD_ID, it)).create()
+        }
+
+        GeneratorsManager.dedicatedGenerators.forEach {
             GeneratorBlock(it).create()
         }
 
@@ -28,7 +33,7 @@ object BlocksRegistry {
         }
     }
 
-    private fun Block.create(): Block = this.apply {
-        BLOCKS[this] = Identifier.of(MOD_ID, (this as GeneratorBlock).type)
+    private fun GeneratorBlock.create(): Block = this.apply {
+        BLOCKS[this] = Identifier.of(MOD_ID, "${id.namespace}_${id.path}")
     }
 }

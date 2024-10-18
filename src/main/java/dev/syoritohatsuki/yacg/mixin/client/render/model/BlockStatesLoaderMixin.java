@@ -1,7 +1,9 @@
 package dev.syoritohatsuki.yacg.mixin.client.render.model;
 
 import com.google.gson.JsonParser;
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig;
+import dev.syoritohatsuki.yacg.util.BuildInGenerators;
+import dev.syoritohatsuki.yacg.config.GeneratorsManager;
+import dev.syoritohatsuki.yacg.util.JsonTemplates;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.BlockStatesLoader;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -33,16 +35,24 @@ public class BlockStatesLoaderMixin {
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void appendNonExistGenerators(Map<Identifier, List<BlockStatesLoader.SourceTrackedData>> blockStates, Profiler profiler, UnbakedModel missingModel, BlockColors blockColors, BiConsumer<ModelIdentifier, UnbakedModel> onLoad, CallbackInfo ci) {
         Map<Identifier, List<BlockStatesLoader.SourceTrackedData>> _blockStates = new HashMap<>(blockStates);
-        GeneratorsConfig.INSTANCE.getTypes().forEach(s -> _blockStates.put(Identifier.of(MOD_ID, "blockstates/" + s + ".json"), List.of(
-                new BlockStatesLoader.SourceTrackedData("yacg", JsonParser.parseString(String.format(
-                        "{\"variants\":{" +
-                        "\"facing=north\":{\"model\":\"yacg:block/%s\"}," +
-                        "\"facing=east\":{\"model\":\"yacg:block/%s\",\"y\":90}," +
-                        "\"facing=south\":{\"model\":\"yacg:block/%s\",\"y\":180}," +
-                        "\"facing=west\":{\"model\":\"yacg:block/%s\",\"y\":270}" +
-                        "}}", s, s, s, s
-                )))
-        )));
+        GeneratorsManager.INSTANCE.getDedicatedGenerators().forEach(identifier -> _blockStates.put(
+                Identifier.of(MOD_ID, "blockstates/" + identifier.getNamespace() + "_" + identifier.getPath() + ".json"),
+                List.of(
+                        new BlockStatesLoader.SourceTrackedData(
+                                MOD_ID,
+                                JsonParser.parseString(JsonTemplates.INSTANCE.getBlockState(identifier))
+                        )
+                )
+        ));
+        BuildInGenerators.INSTANCE.getBuildInGenerators().keySet().forEach(identifier -> _blockStates.put(
+                Identifier.of(MOD_ID, "blockstates/" + MOD_ID + "_" + identifier + ".json"),
+                List.of(
+                        new BlockStatesLoader.SourceTrackedData(
+                                MOD_ID,
+                                JsonParser.parseString(JsonTemplates.INSTANCE.getBlockState(Identifier.of(MOD_ID, identifier)))
+                        )
+                )
+        ));
         this.blockStates = _blockStates;
     }
 }

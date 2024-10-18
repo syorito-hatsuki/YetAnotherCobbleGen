@@ -3,7 +3,9 @@ package dev.syoritohatsuki.yacg.common.block.entity
 import dev.syoritohatsuki.yacg.YetAnotherCobblestoneGenerator.logger
 import dev.syoritohatsuki.yacg.common.block.GeneratorBlock
 import dev.syoritohatsuki.yacg.common.item.UpgradeItem.UpgradesTypes
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig
+import dev.syoritohatsuki.yacg.config.Generator
+import dev.syoritohatsuki.yacg.config.GeneratorsManager
+import dev.syoritohatsuki.yacg.config.ItemId
 import dev.syoritohatsuki.yacg.config.UpgradesConfig
 import dev.syoritohatsuki.yacg.registry.BlocksEntityRegistry
 import net.minecraft.block.BlockState
@@ -22,7 +24,7 @@ import team.reborn.energy.api.base.SimpleEnergyStorage
 import kotlin.random.Random
 
 class GeneratorBlockEntity(
-    blockPos: BlockPos, blockState: BlockState, private var type: String = "", var energyUsage: Int = 0
+    blockPos: BlockPos, blockState: BlockState, private var id: Identifier = Identifier.of(""), var energyUsage: Int = 0
 ) : BlockEntity(BlocksEntityRegistry.GENERATOR_ENTITY, blockPos, blockState), ImplementedInventory {
 
     private var progress: Byte = 0
@@ -63,7 +65,7 @@ class GeneratorBlockEntity(
 
                 // Get random block from setOf blocks from config
                 val randomBlock =
-                    getRandomBlock(entity.type, GeneratorsConfig.getBlocks(entity.type), entity.coefficientMultiply)
+                    getRandomItem(entity.id, GeneratorsManager.getItems(entity.id), entity.coefficientMultiply)
                         ?: return
 
                 // Check if item already exists in any slot (Max cap per slot 1024)
@@ -90,27 +92,27 @@ class GeneratorBlockEntity(
             markDirty(world, blockPos, blockState)
         }
 
-        private fun getRandomBlock(
-            type: String,
-            blocks: Set<GeneratorsConfig.Generator.GenerateItem>,
+        private fun getRandomItem(
+            type: Identifier,
+            items: Map<ItemId, Generator.ItemSettings>,
             coefficient: Byte,
         ): ItemStack? {
-            if (blocks.isEmpty()) {
+            if (items.isEmpty()) {
                 logger.error("Blocks list for $type is empty")
                 return null
             }
 
-            if (coefficient > 1) blocks.map {
-                if (it.coefficient < 50) it.coefficient *= coefficient
+            if (coefficient > 1) items.map {
+                if (it.value.weight < 50) it.value.weight *= coefficient
             }
 
-            var randomNumber = Random.nextInt(blocks.sumOf { it.coefficient })
+            var randomNumber = Random.nextInt(items.values.sumOf { it.weight })
 
-            blocks.forEach { block ->
-                if (randomNumber < block.coefficient) return ItemStack(
-                    Registries.ITEM.get(Identifier.of(block.itemId)), block.count
+            items.forEach { item ->
+                if (randomNumber < item.value.weight) return ItemStack(
+                    Registries.ITEM.get(Identifier.of(item.key)), item.value.count
                 )
-                randomNumber -= block.coefficient
+                randomNumber -= item.value.weight
             }
 
             logger.error("Blocks list for $type is empty")
@@ -133,7 +135,7 @@ class GeneratorBlockEntity(
         Inventories.writeNbt(nbt, inventory, registryLookup)
         nbt.putLong("yacg.energy", energyStorage.amount)
         nbt.putByte("yacg.progress", progress)
-        nbt.putString("yacg.type", type)
+        nbt.putString("yacg.id", id.toString())
         listUpgrades.forEach {
             nbt.putString("yacg.upgrade.${it.name.lowercase()}", it.name)
         }
@@ -143,8 +145,8 @@ class GeneratorBlockEntity(
         Inventories.readNbt(nbt, inventory, registryLookup)
         energyStorage.amount = nbt.getLong("yacg.energy")
         progress = nbt.getByte("yacg.progress")
-        type = nbt.getString("yacg.type")
-        energyUsage = GeneratorsConfig.getEnergyUsage(type)
+        id = Identifier.of(nbt.getString("yacg.id"))
+        energyUsage = GeneratorsManager.getEnergyUsage(id)
         UpgradesTypes.entries.forEach {
             nbt.getString("yacg.upgrade.${it.name.lowercase()}").apply {
                 if (isNullOrBlank()) return@forEach

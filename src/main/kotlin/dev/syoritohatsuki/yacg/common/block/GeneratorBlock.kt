@@ -3,7 +3,7 @@ package dev.syoritohatsuki.yacg.common.block
 import com.mojang.serialization.MapCodec
 import dev.syoritohatsuki.yacg.common.block.entity.GeneratorBlockEntity
 import dev.syoritohatsuki.yacg.common.item.UpgradeItem
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig
+import dev.syoritohatsuki.yacg.config.GeneratorsManager
 import dev.syoritohatsuki.yacg.message.generatorChancesTooltip
 import dev.syoritohatsuki.yacg.message.hiddenTooltip
 import dev.syoritohatsuki.yacg.registry.BlocksEntityRegistry
@@ -33,7 +33,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
-open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.create().strength(2f).requiresTool()),
+open class GeneratorBlock(internal val id: Identifier) : BlockWithEntity(Settings.create().strength(2f).requiresTool()),
     BlockEntityProvider {
     companion object {
         val ENABLED: BooleanProperty = Properties.ENABLED
@@ -41,7 +41,7 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
     }
 
     override fun getCodec(): MapCodec<out BlockWithEntity> = createCodec {
-        GeneratorBlock(type)
+        GeneratorBlock(id)
     }
 
     init {
@@ -60,8 +60,8 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
             return
         }
 
-        GeneratorsConfig.getBlocks(type).forEach {
-            tooltip.generatorChancesTooltip(it.coefficient, it.itemId)
+        GeneratorsManager.getItems(id).forEach {
+            tooltip.generatorChancesTooltip(it.value.weight, it.key)
         }
     }
 
@@ -129,7 +129,7 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
                 blockEntity.removeStack(index)
             } else {
                 val message = Text.empty().append(
-                    Text.literal("[").append(Text.translatable("block.yacg.$type")).append("]")
+                    Text.literal("[").append(Text.translatable("block.yacg.${id.namespace}_${id.path}")).append("]")
                         .formatted(Formatting.AQUA)
                 )
                 blockEntity.items.forEach {
@@ -144,7 +144,7 @@ open class GeneratorBlock(internal val type: String) : BlockWithEntity(Settings.
     }
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
-        GeneratorBlockEntity(pos, state, type, GeneratorsConfig.getEnergyUsage(type))
+        GeneratorBlockEntity(pos, state, id, GeneratorsManager.getEnergyUsage(id))
 
     override fun <T : BlockEntity> getTicker(
         world: World, state: BlockState, type: BlockEntityType<T>

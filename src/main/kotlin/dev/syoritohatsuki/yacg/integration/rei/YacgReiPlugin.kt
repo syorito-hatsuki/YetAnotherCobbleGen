@@ -1,7 +1,7 @@
 package dev.syoritohatsuki.yacg.integration.rei
 
 import dev.syoritohatsuki.yacg.YetAnotherCobblestoneGenerator.MOD_ID
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig
+import dev.syoritohatsuki.yacg.config.GeneratorsManager
 import dev.syoritohatsuki.yacg.message.generationRarityText
 import dev.syoritohatsuki.yacg.registry.BlocksRegistry
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
@@ -26,16 +26,22 @@ object YacgReiPlugin : REIClientPlugin {
     }
 
     override fun registerDisplays(registry: DisplayRegistry) {
-        GeneratorsConfig.getTypes().forEach { type ->
+        GeneratorsManager.dedicatedGenerators.forEach { id ->
             registry.add(
-                TableDisplay(
-                    EntryIngredients.of(ItemStack(Registries.ITEM.get(Identifier.of(MOD_ID, type)))),
-                    GeneratorsConfig.getBlocks(type).map { item ->
-                        EntryIngredient.of(
-                            EntryStacks.of(ItemStack(Registries.ITEM.get(Identifier.of(item.itemId)), item.count))
-                                .tooltip(generationRarityText(item.coefficient))
+                TableDisplay(EntryIngredients.of(
+                    ItemStack(
+                        Registries.ITEM.get(
+                            Identifier.of(
+                                MOD_ID, "${id.namespace}_${id.path}"
+                            )
                         )
-                    })
+                    )
+                ), GeneratorsManager.getItems(id).map { item ->
+                    EntryIngredient.of(
+                        EntryStacks.of(ItemStack(Registries.ITEM.get(Identifier.of(item.key)), item.value.count))
+                            .tooltip(generationRarityText(item.value.weight))
+                    )
+                })
             )
         }
     }

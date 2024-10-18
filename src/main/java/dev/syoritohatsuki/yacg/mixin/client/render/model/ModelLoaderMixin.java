@@ -1,6 +1,8 @@
 package dev.syoritohatsuki.yacg.mixin.client.render.model;
 
-import dev.syoritohatsuki.yacg.config.GeneratorsConfig;
+import dev.syoritohatsuki.yacg.util.BuildInGenerators;
+import dev.syoritohatsuki.yacg.config.GeneratorsManager;
+import dev.syoritohatsuki.yacg.util.JsonTemplates;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.BlockStatesLoader;
 import net.minecraft.client.render.model.ModelLoader;
@@ -31,24 +33,13 @@ public class ModelLoaderMixin {
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V"))
     private void appendNonExistGenerators(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<BlockStatesLoader.SourceTrackedData>> blockStates, CallbackInfo ci) {
         Map<Identifier, JsonUnbakedModel> _jsonUnbakedModels = new HashMap<>(jsonUnbakedModels);
-        GeneratorsConfig.INSTANCE.getTypes().forEach(s -> {
-            _jsonUnbakedModels.put(
-                    Identifier.of(MOD_ID, "models/block/" + s + ".json"), JsonUnbakedModel.deserialize(String.format(
-                            "{\"parent\":\"block/cube_all\"," +
-                            "\"textures\":{" +
-                            "\"down\":\"yacg:block/%s/bottom\"," +
-                            "\"east\":\"yacg:block/%s/left\"," +
-                            "\"north\":\"yacg:block/%s/front\"," +
-                            "\"south\":\"yacg:block/%s/back\"," +
-                            "\"up\":\"yacg:block/%s/top\"," +
-                            "\"west\":\"yacg:block/%s/right\"," +
-                            "\"particle\":\"yacg:block/%s/back\"" +
-                            "}}", s, s, s, s, s, s, s
-                    )));
-            _jsonUnbakedModels.put(
-                    Identifier.of(MOD_ID, "models/item/" + s + ".json"), JsonUnbakedModel.deserialize(String.format(
-                            "{\"parent\":\"yacg:block/%s\"}", s
-                    )));
+        GeneratorsManager.INSTANCE.getDedicatedGenerators().forEach(identifier -> {
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + identifier.getNamespace() + "_" + identifier.getPath() + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getBlockModel(identifier)));
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/item/" + identifier.getNamespace() + "_" + identifier.getPath() + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getItemModel(identifier)));
+        });
+        BuildInGenerators.INSTANCE.getBuildInGenerators().keySet().forEach(buildInIdentifier -> {
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + MOD_ID + "_" + buildInIdentifier + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getBlockModel(Identifier.of(MOD_ID, buildInIdentifier))));
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/item/" + MOD_ID + "_" + buildInIdentifier + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getItemModel(Identifier.of(MOD_ID, buildInIdentifier))));
         });
         this.jsonUnbakedModels = _jsonUnbakedModels;
     }
