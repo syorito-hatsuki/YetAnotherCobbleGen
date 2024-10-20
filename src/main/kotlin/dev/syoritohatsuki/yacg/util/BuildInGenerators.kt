@@ -35,5 +35,13 @@ object BuildInGenerators {
                 "minecraft:deepslate" to Generator.ItemSettings(5, 1),
             )
         ),
+        "over_pumpkin" to Generator(
+            0, mapOf(
+                "minecraft:pumpkin_seeds" to Generator.ItemSettings(100, 1),
+                "minecraft:pumpkin" to Generator.ItemSettings(25, 1),
+                "minecraft:carved_pumpkin" to Generator.ItemSettings(25, 1),
+                "minecraft:pumpkin_pie" to Generator.ItemSettings(10, 1),
+            )
+        ),
     )
 }
