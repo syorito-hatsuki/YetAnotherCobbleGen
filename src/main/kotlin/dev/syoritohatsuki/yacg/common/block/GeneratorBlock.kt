@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.loot.context.LootContextParameterSet
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.DirectionProperty
@@ -31,6 +32,7 @@ import net.minecraft.util.*
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
 open class GeneratorBlock(internal val id: Identifier) : BlockWithEntity(Settings.create().strength(2f).requiresTool()),
@@ -45,9 +47,9 @@ open class GeneratorBlock(internal val id: Identifier) : BlockWithEntity(Setting
     }
 
     init {
-        defaultState = ((stateManager.defaultState as BlockState).with(FACING, Direction.NORTH) as BlockState).with(
-            ENABLED, true
-        ) as BlockState
+        defaultState = stateManager.defaultState
+            .with(FACING, Direction.NORTH)
+            .with(ENABLED, true)
     }
 
     override fun appendTooltip(
@@ -95,13 +97,10 @@ open class GeneratorBlock(internal val id: Identifier) : BlockWithEntity(Setting
         super.onStateReplaced(state, world, pos, newState, moved)
     }
 
-    override fun neighborUpdate(
-        state: BlockState, world: World, pos: BlockPos, sourceBlock: Block, sourcePos: BlockPos, notify: Boolean
-    ) {
-        val bl: Boolean = !world.isReceivingRedstonePower(pos)
-        if (bl != state.get(ENABLED)) world.setBlockState(
-            pos, state.with(HopperBlock.ENABLED, bl) as BlockState, 4
-        )
+    override fun neighborUpdate(state: BlockState, world: World, pos: BlockPos, sourceBlock: Block, sourcePos: BlockPos, notify: Boolean) {
+        if (!world.isClient && state.get(ENABLED) != !world.isReceivingRedstonePower(pos)) {
+            world.setBlockState(pos, state.cycle(ENABLED), NOTIFY_LISTENERS)
+        }
     }
 
     override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity): BlockState {
@@ -154,4 +153,10 @@ open class GeneratorBlock(internal val id: Identifier) : BlockWithEntity(Setting
         state: BlockState,
         builder: LootContextParameterSet.Builder
     ): MutableList<ItemStack> = mutableListOf(this.asItem().defaultStack)
+
+    override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        if (state.get(ENABLED) && !world.isReceivingRedstonePower(pos)) {
+            world.setBlockState(pos, state.cycle(ENABLED), NOTIFY_LISTENERS)
+        }
+    }
 }
