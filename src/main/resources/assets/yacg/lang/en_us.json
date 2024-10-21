@@ -3,6 +3,7 @@
   "block.yacg.yacg_ore": "Ore Generator",
   "block.yacg.yacg_stone": "Stone Generator",
   "block.yacg.yacg_over_pumpkin": "Pumpkin Generator",
+  "block.yacg.yacg_nether_pumpkin": "Nether Pumpkin Generator",
   "config.jade.plugin_yacg.generators": "Yet Another Cobblestone Generator",
   "emi.category.yacg.generators": "Resource Generators",
   "item.yacg.upgrade_energy_free": "Upgrade: Energy Free",

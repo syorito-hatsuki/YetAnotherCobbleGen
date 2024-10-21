@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BSB",
+    "LCL",
+    "BHB"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "B": {
+      "item": "minecraft:basalt"
+    },
+    "C": {
+      "item": "minecraft:soul_campfire"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "L": {
+      "item": "minecraft:blaze_rod"
+    }
+  },
+  "result": {
+    "id": "yacg:yacg_nether_pumpkin",
+    "count": 1
+  }
+}

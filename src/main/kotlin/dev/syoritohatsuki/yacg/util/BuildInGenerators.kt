@@ -43,5 +43,14 @@ object BuildInGenerators {
                 "minecraft:pumpkin_pie" to Generator.ItemSettings(10, 1),
             )
         ),
+        "nether_pumpkin" to Generator(
+            0, mapOf(
+                "minecraft:coal" to Generator.ItemSettings(100, 1),
+                "minecraft:gunpowder" to Generator.ItemSettings(50, 1),
+                "minecraft:glowstone_dust" to Generator.ItemSettings(20, 1),
+                "minecraft:blaze_powder" to Generator.ItemSettings(20, 1),
+                "minecraft:wither_skeleton_skull" to Generator.ItemSettings(1, 1),
+            )
+        )
     )
 }
