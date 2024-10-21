@@ -20,6 +20,9 @@ object PathUtil {
     fun getNativeImagePath(id: Identifier, side: String): Path =
         generatorsPath.resolve(id.namespace).resolve(id.path).resolve("textures").resolve("$side.png")
 
+    fun getNativeOffImagePath(id: Identifier, side: String): Path =
+        generatorsPath.resolve(id.namespace).resolve(id.path).resolve("textures").resolve("off").resolve("$side.png")
+
     fun getLangFilesPaths(langCode: String): List<Path> = GeneratorsManager.dedicatedGenerators.map {
         generatorsPath.resolve(it.namespace).resolve("$langCode.json")
     }

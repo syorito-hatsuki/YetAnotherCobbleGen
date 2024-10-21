@@ -18,5 +18,6 @@ public abstract class SpriteLoaderMixin {
     @Inject(method = "collectStitchedSprites", at = @At(value = "HEAD"))
     private void putGeneratorsSpriteContents(TextureStitcher<SpriteContents> stitcher, int atlasWidth, int atlasHeight, CallbackInfoReturnable<Map<Identifier, Sprite>> cir) {
         GeneratorSprite.INSTANCE.getGeneratorSpriteContents().forEach(stitcher::add);
+        GeneratorSprite.INSTANCE.getGeneratorOffSpriteContents().forEach(stitcher::add);
     }
 }

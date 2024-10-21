@@ -25,7 +25,24 @@ object GeneratorSprite {
         }
     }.flatten()
 
+    fun getGeneratorOffSpriteContents() = GeneratorsManager.dedicatedGenerators.map { type ->
+        sides.map { side ->
+            SpriteContents(
+                Identifier.of(YetAnotherCobblestoneGenerator.MOD_ID, "block/${type.namespace}_${type.path}/off/${side}"),
+                SpriteDimensions(WIDTH, HEIGHT),
+                getNativeImageOff(type, side),
+                ResourceMetadata.NONE
+            )
+        }
+    }.flatten()
+
     private fun getNativeImage(id: Identifier, side: String) = NativeImage.read(
         PathUtil.getNativeImagePath(id, side).toFile().inputStream()
     )
+
+    private fun getNativeImageOff(id: Identifier, side: String): NativeImage = try {
+        NativeImage.read(PathUtil.getNativeOffImagePath(id, side).toFile().inputStream())
+    } catch (_: Exception) {
+        NativeImage.read(PathUtil.getNativeImagePath(id, side).toFile().inputStream())
+    }
 }

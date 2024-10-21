@@ -35,10 +35,12 @@ public class ModelLoaderMixin {
         Map<Identifier, JsonUnbakedModel> _jsonUnbakedModels = new HashMap<>(jsonUnbakedModels);
         GeneratorsManager.INSTANCE.getDedicatedGenerators().forEach(identifier -> {
             _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + identifier.getNamespace() + "_" + identifier.getPath() + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getBlockModel(identifier)));
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + identifier.getNamespace() + "_" + identifier.getPath() + "_off.json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getOffBlockModel(identifier)));
             _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/item/" + identifier.getNamespace() + "_" + identifier.getPath() + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getItemModel(identifier)));
         });
         BuildInGenerators.INSTANCE.getBuildInGenerators().keySet().forEach(buildInIdentifier -> {
             _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + MOD_ID + "_" + buildInIdentifier + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getBlockModel(Identifier.of(MOD_ID, buildInIdentifier))));
+            _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/block/" + MOD_ID + "_" + buildInIdentifier + "_off.json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getOffBlockModel(Identifier.of(MOD_ID, buildInIdentifier))));
             _jsonUnbakedModels.put(Identifier.of(MOD_ID, "models/item/" + MOD_ID + "_" + buildInIdentifier + ".json"), JsonUnbakedModel.deserialize(JsonTemplates.INSTANCE.getItemModel(Identifier.of(MOD_ID, buildInIdentifier))));
         });
         this.jsonUnbakedModels = _jsonUnbakedModels;
