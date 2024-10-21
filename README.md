@@ -125,7 +125,7 @@ of block. That's why I made my own mod, with a wide range of customization optio
 ### Config
 
 <details>
-  <summary>Generators default config</summary>
+  <summary>Generators default config (Before 2024.10.1)</summary>
 
 ```json
 [
