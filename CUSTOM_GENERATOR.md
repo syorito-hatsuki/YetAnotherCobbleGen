@@ -2,7 +2,7 @@
 
 ## Folder Structure
 
-```toml
+```properties
 .minecraft
 └── config
     └── yacg
